@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SBT: javax.cache:cache-api:1.0.0:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/javax.cache/cache-api/jars/cache-api-1.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

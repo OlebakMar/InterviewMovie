@@ -1,0 +1,11 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# https://www.playframework.com/documentation/latest/ScalaRouting
+# ~~~~
+
+# inverview stuff
+#POST  /movie                    registerMovie
+GET    /movie                     controllers.MovieController.getMovieDetails
+POST   /movie                     controllers.MovieController.registerMovie
+PUT    /movie                     controllers.MovieController.reserveSeatAtMovie
+
