@@ -76,7 +76,6 @@ private class MovieStorageActor extends Actor{
         case None => Future.failed(new RuntimeException(s"Could not find movie with imdbId: ${movieId.imdbId} , screenId: ${movieId.screenId}"))
       }
 
-      println(s"found movie. Will send it back to Sender$maybeMovie  $self")
       futureMovie pipeTo sender
   }
 

@@ -14,9 +14,7 @@ class MovieModelSpec extends FlatSpec
   with BeforeAndAfterAll
   with MovieTestFixture{
 
-  val application: Application = new GuiceApplicationBuilder()
-    .configure("some.configuration" -> "value")
-    .build()
+  val application: Application = new GuiceApplicationBuilder().build()
 
 
   override def beforeAll(): Unit = {
@@ -37,17 +35,17 @@ class MovieModelSpec extends FlatSpec
     //id.isDefined should be(true) this is always empty due to lack of Salat support for compisite keys
 
     //Update
-    val updateResult = MovieDAO.update(MovieQueryParams(_id = Some(testmovieId)).toDBObject,MovieDAO.toDBObject(updatedMovie))
+    val updateResult = MovieDAO.update(MovieQueryParams(_id = Some(testMovieId)).toDBObject,MovieDAO.toDBObject(updatedMovie))
     updateResult.isUpdateOfExisting should be(true)
 
     // Read:
-    val getResult = MovieDAO.find(MovieQueryParams(_id = Some(testmovieId)).toDBObject).toList.headOption
+    val getResult = MovieDAO.find(MovieQueryParams(_id = Some(testMovieId)).toDBObject).toList.headOption
     getResult.isDefined should be(true)
     getResult should equal(Some(updatedMovie))
 
     //Delete
-    MovieDAO.remove(MovieQueryParams(_id = Some(testmovieId)).toDBObject)
-    val removedResult = MovieDAO.find(MovieQueryParams(_id = Some(testmovieId)).toDBObject).toList.headOption
+    MovieDAO.remove(MovieQueryParams(_id = Some(testMovieId)).toDBObject)
+    val removedResult = MovieDAO.find(MovieQueryParams(_id = Some(testMovieId)).toDBObject).toList.headOption
     removedResult.isDefined should be(false)
 
   }
@@ -74,16 +72,34 @@ class MovieModelSpec extends FlatSpec
   "MovieId" should "deserialized from JSON correctly " in {
 
     val maybeMovieIdRequestJSON = Json.parse(
-      """
+      s"""
         |{
-        |  "imdbId": "tt0111161",
+        |  "imdbId": "$randomId",
         |  "screenId": "screen_123456"
         |}
       """.stripMargin)
 
     val maybeMovieId = Json.fromJson[MovieId](maybeMovieIdRequestJSON).asOpt
 
-    maybeMovieId should be(Some(testmovieId))
+    maybeMovieId should be(Some(testMovieId))
+
+
+  }
+
+  "MovieId" should " fail to deserialized from JSON correctly " in {
+
+    val maybeMovieIdRequestJSON = Json.parse(
+      s"""
+        |{
+        |  "brokenId": "$randomId",
+        |  "screenId": "screen_123456",
+        |  "availableSeats": 100
+        |}
+      """.stripMargin)
+
+    val maybeMovieId = Json.fromJson[MovieId](maybeMovieIdRequestJSON).asOpt
+
+    maybeMovieId should be(None)
 
 
   }

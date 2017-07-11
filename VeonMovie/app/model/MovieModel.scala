@@ -38,6 +38,7 @@ case class Movie(_id: MovieId,
                  availableSeats: Int,
                  reservedSeats: Int = 0){
   def hasAvailableSeats = reservedSeats < availableSeats
+  def toMovieDTO = MovieDTO(_id.imdbId,_id.screenId,availableSeats,Some(reservedSeats))
 }
 
 object Movie {
@@ -58,7 +59,7 @@ case class MovieDTO(imdbId: String,
                     screenId: String,
                     //  movieTitle: String,
                     availableSeats: Int,
-                    reservedSeats: Option[Int] = None){
+                    reservedSeats: Option[Int] = Some(0)){
   def toMovie = Movie(MovieId(imdbId,screenId),availableSeats)
 }
 

@@ -1,6 +1,7 @@
 package testFixtures
 
-import model.{Movie, MovieId}
+import model.{Movie, MovieDTO, MovieId}
+import org.bson.types.ObjectId
 import play.api.libs.json.Json
 
 /**
@@ -8,10 +9,16 @@ import play.api.libs.json.Json
   */
 trait MovieTestFixture {
 
-  val testmovieId = MovieId("tt0111161", "screen_123456")
-  val testMovie = Movie(testmovieId, 100)
+
+  val randomId = new ObjectId().toString
+
+  val testMovieId = MovieId(randomId, "screen_123456")
+  val testMovie = Movie(testMovieId, 100)
+  val testMovieDTO = MovieDTO(testMovieId.imdbId, testMovieId.screenId,100)
 
   val testJsonMovie = Json.toJson(testMovie)
-  val testJsonMovieId = Json.toJson(testmovieId)
+  val testJsonMovieId = Json.toJson(testMovieId)
+  val testJsonMovieDTO = Json.toJson(testMovieDTO)
+
 
 }

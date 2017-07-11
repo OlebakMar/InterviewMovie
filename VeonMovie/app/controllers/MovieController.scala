@@ -31,7 +31,7 @@ class MovieController @Inject()(cc: ControllerComponents) extends AbstractContro
             println(s"going to register movie now. $movieToRegister")
             val movieResult = movieManagerAPI.registerMovie(movieToRegister)
             movieResult.map { movie =>
-              Ok(Json.toJson(movie))
+              Ok(Json.toJson(movie.toMovieDTO))
             }.recover{
               case ex  =>
                 BadRequest(errorJson(ex.getMessage))
@@ -49,12 +49,12 @@ class MovieController @Inject()(cc: ControllerComponents) extends AbstractContro
       val maybeJsonBody = body.asJson
       maybeJsonBody match{
         case Some(jsonBody) =>
-          jsonBody.asOpt[MovieId] match {
+          Json.fromJson[MovieId](jsonBody).asOpt match {
             case Some(movieId) =>
               println(s"going to reserve seat at $movieId.")
               val movieResult = movieManagerAPI.reserveSeatAtMovie(movieId)
               movieResult.map { movie =>
-                Ok(Json.toJson(movie))
+                Ok(Json.toJson(movie.toMovieDTO))
               }.recover{
                 case ex  =>
                   BadRequest(errorJson(ex.getMessage))
@@ -77,7 +77,7 @@ class MovieController @Inject()(cc: ControllerComponents) extends AbstractContro
           case Some(movieId) =>
             val movieResult = movieManagerAPI.retrieveMovieDetails(movieId)
             movieResult.map { movie =>
-              Ok(Json.toJson(movie))
+              Ok(Json.toJson(movie.toMovieDTO))
             }.recover{
               case ex  =>
                 BadRequest(errorJson(ex.getMessage))
